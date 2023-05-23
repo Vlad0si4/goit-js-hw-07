@@ -9,7 +9,7 @@ const galleryItem = galleryItems.map(({ preview, original, description }) =>
 <img class="gallery__image"
  src=${preview}
 data-source=${original}
-alt=${description}></a></li>`)
+alt='${description}'></a></li>`)
 
 newGalleryList.insertAdjacentHTML('beforeend', galleryItem.join(''))
 
@@ -17,11 +17,13 @@ console.log(galleryItems);
 
 const handlerClickImg = (event) => {
   event.preventDefault();
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
 
-  const instance = basicLightbox.create(`
-    <img src=${event.target.dataset.source} alt=${event.target.alt} width="800" height="600">
-  `);
-
+  const instance = basicLightbox.create(`<img src=${event.target.dataset.source} alt=${event.target.alt} width="800" height="600">
+  `, {onClose: (instance) => newGalleryList.removeEventListener('keydown', closeOnEsc)}
+  );
   instance.show();
 
   const closeOnEsc = (event) => {
